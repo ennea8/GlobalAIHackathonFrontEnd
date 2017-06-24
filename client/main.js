@@ -1,8 +1,8 @@
 // app.js
 
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import { render } from 'react-dom';
+import {render} from 'react-dom';
 
 //import Using ES6 syntax
 import WeUI from 'react-weui';
@@ -15,6 +15,15 @@ const {
   ActionSheet,
   Gallery,
   Popup,
+
+  Panel,
+  PanelHeader,
+  PanelBody,
+  PanelFooter,
+
+  Flex,
+  FlexItem,
+
 } = WeUI;
 
 
@@ -28,19 +37,17 @@ import {
 class App extends Component {
 
   state = {
-    show_result:false,
-    imgData:'',
+    show_result: true,
+    imgData: '',
 
-
-
-
+    ///////
     auto_show: false,
     ios_show: false,
     android_show: false,
     menus: [{
       label: '拍照',
-      onClick: ()=> {
-        MeteorCameraUI.getPicture({},function(data){
+      onClick: () => {
+        MeteorCameraUI.getPicture({}, function (data) {
           console.log(data)
         })
 
@@ -48,29 +55,29 @@ class App extends Component {
     }, {
       label: <label htmlFor="select-img-input">
         选择图片
-        <input  id ='select-img-input'
-                type="file"
-                accept="image/*"
-                style={{ display: 'none' }}
-                capture="Camera"
-                onChange={(e) => {
-                  const reader = new FileReader()
-                  reader.onload = (e) => {
-                    //snapHandler(e.target.result, `${owner}ShowModal`)
-                    console.log(e.target.result)
+        <input id='select-img-input'
+               type="file"
+               accept="image/*"
+               style={{display: 'none'}}
+               capture="Camera"
+               onChange={(e) => {
+                 const reader = new FileReader()
+                 reader.onload = (e) => {
+                   //snapHandler(e.target.result, `${owner}ShowModal`)
+                   console.log(e.target.result)
 
-                    this.setState({
-                      imgData:e.target.result,
-                      show_result:true,
-                    })
+                   this.setState({
+                     imgData: e.target.result,
+                     show_result: true,
+                   })
 
-                  }
-                  reader.readAsDataURL(e.target.files.item(0))
-                }}
+                 }
+                 reader.readAsDataURL(e.target.files.item(0))
+               }}
         />
 
       </label>,
-      onClick: (e)=> {
+      onClick: (e) => {
 
       }
     }],
@@ -82,7 +89,7 @@ class App extends Component {
     ]
   };
 
-  hide(){
+  hide() {
     this.setState({
       auto_show: false,
       ios_show: false,
@@ -90,28 +97,28 @@ class App extends Component {
     })
   }
 
-  showResult(){
-    this.setState({show_result:true})
-  }
-  hideResult(){
-    this.setState({show_result:false})
+  showResult() {
+    this.setState({show_result: true})
   }
 
+  hideResult() {
+    this.setState({show_result: false})
+  }
 
 
   render() {
-    const styles ={
-      logo:{
+    const styles = {
+      logo: {
         // width:'90%',
-        marginTop:'50px',
+        marginTop: '50px',
         textAlign: 'center',
 
       },
-      footer:{
-        position:'fixed',
-        bottom:0,
-        height:'50px',
-        width:'100%',
+      footer: {
+        position: 'fixed',
+        bottom: 0,
+        height: '50px',
+        width: '100%',
       }
 
     }
@@ -126,43 +133,90 @@ class App extends Component {
 
         <div style={styles.footer}>
           <Button type="default"
-                  onClick={e=>this.setState({auto_show: true})}>
+                  onClick={e => this.setState({auto_show: true})}>
             选择图片
           </Button>
-          <input type="file" name="select-file" />
+          <input type="file" name="select-file"/>
         </div>
 
-          <ActionSheet
-            menus={this.state.menus}
-            actions={this.state.actions}
-            show={this.state.auto_show}
-            onRequestClose={e=>this.setState({auto_show: false})}
-          />
+        <ActionSheet
+          menus={this.state.menus}
+          actions={this.state.actions}
+          show={this.state.auto_show}
+          onRequestClose={e => this.setState({auto_show: false})}
+        />
 
 
         <Popup show={this.state.show_result}
-               onRequestClose={e=>this.setState({show_result: false})}
+               onRequestClose={e => this.setState({show_result: false})}
                className="result">
 
 
           <div className="result-img">
-            <img  src={this.state.imgData}
-                  style={{maxWidth:'300px'}}
-                  alt=""/>
+            <img src={this.state.imgData}
+                 style={{width: '80%'}}
+                 alt=""/>
 
           </div>
-
 
           <div className="result-data">
 
+            <div className="list">
+              <h4 className="title">Result</h4>
+              <h2 className="emotion">Angry</h2>
 
+              <br/>
 
+              <div className="row">
+                <div className="col">
+                  <span className="lable"> Happy</span>
+                  <span className="num">2%</span>
+                </div>
+                <div className="col">
+
+                  <span className="lable"> Fear</span>
+                  <span className="num">3%</span>
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col">
+                  <span className="lable"> Neutral</span>
+                  <span className="num">2%</span>
+                </div>
+                <div className="col">
+
+                  <span className="lable"> Angry</span>
+                  <span className="num">3%</span>
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col">
+                  <span className="lable"> Sad</span>
+                  <span className="num">2%</span>
+                </div>
+                <div className="col">
+
+                  <span className="lable"> Disgust</span>
+                  <span className="num">3%</span>
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col">
+                  <span className="lable"> Surprise</span>
+                  <span className="num">2%</span>
+                </div>
+                <div className="col">
+
+                </div>
+              </div>
+
+            </div>
 
 
           </div>
-
-
-
 
         </Popup>
 
