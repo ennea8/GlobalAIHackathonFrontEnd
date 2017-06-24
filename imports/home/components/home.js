@@ -31,7 +31,7 @@ const {
 export default class Home extends Component {
 
   state = {
-    show_result: false,
+    show_result: true,
     imgData: '',
 
     ///////
@@ -132,6 +132,7 @@ export default class Home extends Component {
     return (
       <div className="home-page">
 
+
         <img src="img/group3.png"  width='100%' alt=""/>
 
         <div style={styles.footer}>
@@ -163,9 +164,17 @@ export default class Home extends Component {
                className="result">
 
 
+          <div style={{padding:'15px'}}>
+            <span onClick={e => this.setState({show_result: false})}>
+              返回
+            </span>
+          </div>
+
+
+
           <div className="result-img">
             <img src={this.state.imgData}
-                 style={{width: '80%'}}
+                 style={{width: '100%'}}
                  alt=""/>
 
           </div>
