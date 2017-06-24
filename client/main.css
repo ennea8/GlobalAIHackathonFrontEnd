@@ -1,5 +1,11 @@
 
 
+.home-page{
+    /*background: url("img/group3.png") center top;*/
+
+}
+
+
 
 /*  结果页面*/
 .result-img{
@@ -51,5 +57,13 @@
     width: 30%;
 }
 
+
+
+.nav-bar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+}
 
 

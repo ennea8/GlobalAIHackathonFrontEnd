@@ -102,35 +102,52 @@ export default class Home extends Component {
 
   render() {
     const styles = {
+
+      footer: {
+
+        paddingLeft:'20px',
+
+        // position: 'fixed',
+        // bottom: 0,
+        height: '50px',
+        width: '50%',
+      },
       logo: {
-        // width:'90%',
-        marginTop: '50px',
-        textAlign: 'center',
+        marginLeft: '10px',
+
+        marginTop: '20px',
+
+        marginBottom:'20px',
+        textAlign: 'left',
 
       },
-      footer: {
-        position: 'fixed',
-        bottom: 0,
-        height: '50px',
-        width: '100%',
+      button:{
+        background:'blue'
       }
+
 
     }
 
 
     return (
-      <div>
-        <div style={styles.logo}>
-          <img src="img/page1.png" alt=""/>
-        </div>
+      <div className="home-page">
 
+        <img src="img/group3.png"  width='100%' alt=""/>
 
         <div style={styles.footer}>
-          <Button type="default"
-                  onClick={e => this.setState({auto_show: true})}>
+
+          <div style={styles.logo}>
+            <img src="img/page1.png" alt=""/>
+          </div>
+
+
+          <Button
+            style={styles.button}
+            onClick={e => this.setState({auto_show: true})}>
             选择图片
           </Button>
-          <input type="file" name="select-file"/>
+
+          <input type="file" name="select-file" style={{display:'none'}}/>
         </div>
 
         <ActionSheet
