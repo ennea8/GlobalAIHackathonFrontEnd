@@ -119,7 +119,7 @@ export default class Home extends Component {
 
         marginTop: '20px',
 
-        marginBottom:'20px',
+        marginBottom:'10px',
         textAlign: 'left',
 
       },
