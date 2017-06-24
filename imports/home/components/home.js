@@ -38,15 +38,17 @@ export default class Home extends Component {
     auto_show: false,
     ios_show: false,
     android_show: false,
-    menus: [{
-      label: '拍照',
-      onClick: () => {
-        MeteorCameraUI.getPicture({}, function (data) {
-          console.log(data)
-        })
-
-      }
-    }, {
+    menus: [
+    //   {
+    //   label: '拍照',
+    //   onClick: () => {
+    //     MeteorCameraUI.getPicture({}, function (data) {
+    //       console.log(data)
+    //     })
+    //
+    //   }
+    // },
+      {
       label: <label htmlFor="select-img-input">
         选择图片
         <input id='select-img-input'
@@ -123,8 +125,11 @@ export default class Home extends Component {
       },
       button:{
         background:'blue'
-      }
+      },
 
+      labelButton:{
+        background:'rgb(27, 155, 255)'
+      }
 
     }
 
@@ -142,13 +147,49 @@ export default class Home extends Component {
           </div>
 
 
-          <Button
-            style={styles.button}
-            onClick={e => this.setState({auto_show: true})}>
-            选择图片
-          </Button>
+          {/*<Button*/}
+            {/*style={styles.button}*/}
+            {/*onClick={e => this.setState({auto_show: true})}>*/}
+            {/*选择图片*/}
+          {/*</Button>*/}
 
-          <input type="file" name="select-file" style={{display:'none'}}/>
+
+          <label htmlFor="select-img-input"
+                 className="label-button"
+                 style = {styles.labelButton}>
+
+            选择图片
+            {/*<Button*/}
+              {/*style={styles.button}>*/}
+              {/*选择图片*/}
+            {/*</Button>*/}
+
+            <input id='select-img-input'
+                   type="file"
+                   accept="image/*"
+                   style={{display: 'none'}}
+                   capture="Camera"
+                   onChange={(e) => {
+                     const reader = new FileReader()
+                     reader.onload = (e) => {
+                       //snapHandler(e.target.result, `${owner}ShowModal`)
+                       console.log(e.target.result)
+
+                       this.setState({
+                         imgData: e.target.result,
+                         show_result: true,
+                       })
+
+                     }
+                     reader.readAsDataURL(e.target.files.item(0))
+                   }}
+            />
+
+          </label>
+
+
+
+
         </div>
 
         <ActionSheet
