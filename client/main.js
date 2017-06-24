@@ -4,24 +4,36 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { render } from 'react-dom';
 
-//import using commonJS Module *Require Plugins
-//import { Button } from 'react-weui'
-
 //import Using ES6 syntax
 import WeUI from 'react-weui';
-
-//import styles
 import 'weui';
 import 'react-weui/lib/react-weui.min.css';
 
+
 const {
   Button,
-  ActionSheet
+  ActionSheet,
+  Gallery,
+  Popup,
 } = WeUI;
+
+
+import {
+  BrowserRouter as Router,
+  Route,
+  Link
+} from 'react-router-dom'
+
 
 class App extends Component {
 
   state = {
+    show_result:false,
+    imgData:'',
+
+
+
+
     auto_show: false,
     ios_show: false,
     android_show: false,
@@ -36,9 +48,29 @@ class App extends Component {
     }, {
       label: <label htmlFor="select-img-input">
         选择图片
-        <input  id ='select-img-input' type="file" style={{display:'none'}}/>
+        <input  id ='select-img-input'
+                type="file"
+                accept="image/*"
+                style={{ display: 'none' }}
+                capture="Camera"
+                onChange={(e) => {
+                  const reader = new FileReader()
+                  reader.onload = (e) => {
+                    //snapHandler(e.target.result, `${owner}ShowModal`)
+                    console.log(e.target.result)
+
+                    this.setState({
+                      imgData:e.target.result,
+                      show_result:true,
+                    })
+
+                  }
+                  reader.readAsDataURL(e.target.files.item(0))
+                }}
+        />
+
       </label>,
-      onClick: ()=> {
+      onClick: (e)=> {
 
       }
     }],
@@ -57,6 +89,15 @@ class App extends Component {
       android_show: false,
     })
   }
+
+  showResult(){
+    this.setState({show_result:true})
+  }
+  hideResult(){
+    this.setState({show_result:false})
+  }
+
+
 
   render() {
     const styles ={
@@ -84,14 +125,11 @@ class App extends Component {
 
 
         <div style={styles.footer}>
-
           <Button type="default"
                   onClick={e=>this.setState({auto_show: true})}>
             选择图片
           </Button>
-
           <input type="file" name="select-file" />
-
         </div>
 
           <ActionSheet
@@ -102,10 +140,37 @@ class App extends Component {
           />
 
 
+        <Popup show={this.state.show_result}
+               onRequestClose={e=>this.setState({show_result: false})}
+               className="result">
+
+
+          <div className="result-img">
+            <img  src={this.state.imgData}
+                  style={{maxWidth:'300px'}}
+                  alt=""/>
+
+          </div>
+
+
+          <div className="result-data">
+
+
+
+
+
+          </div>
+
+
+
+
+        </Popup>
+
       </div>
     );
   }
 }
+
 
 Meteor.startup(() => {
   render(<App />, document.getElementById('render-target'));
