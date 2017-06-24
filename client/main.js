@@ -1,231 +1,54 @@
-// app.js
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
-import {render} from 'react-dom';
+import { createStore, combineReducers, applyMiddleware } from 'redux'
+import { Provider } from 'react-redux'
 
-//import Using ES6 syntax
-import WeUI from 'react-weui';
-import 'weui';
-import 'react-weui/lib/react-weui.min.css';
+import createHistory from 'history/createBrowserHistory'
+import { Route } from 'react-router'
 
+import { ConnectedRouter, routerReducer, routerMiddleware, push } from 'react-router-redux'
 
-const {
-  Button,
-  ActionSheet,
-  Gallery,
-  Popup,
-
-  Panel,
-  PanelHeader,
-  PanelBody,
-  PanelFooter,
-
-  Flex,
-  FlexItem,
-
-} = WeUI;
+import reducers from './reducers' // Or wherever you keep your reducers
 
 
-import {
-  BrowserRouter as Router,
-  Route,
-  Link
-} from 'react-router-dom'
+import Home from '../imports/home/components/home'
+import Result from '../imports/home/result'
 
 
-class App extends Component {
-
-  state = {
-    show_result: true,
-    imgData: '',
-
-    ///////
-    auto_show: false,
-    ios_show: false,
-    android_show: false,
-    menus: [{
-      label: '拍照',
-      onClick: () => {
-        MeteorCameraUI.getPicture({}, function (data) {
-          console.log(data)
-        })
-
-      }
-    }, {
-      label: <label htmlFor="select-img-input">
-        选择图片
-        <input id='select-img-input'
-               type="file"
-               accept="image/*"
-               style={{display: 'none'}}
-               capture="Camera"
-               onChange={(e) => {
-                 const reader = new FileReader()
-                 reader.onload = (e) => {
-                   //snapHandler(e.target.result, `${owner}ShowModal`)
-                   console.log(e.target.result)
-
-                   this.setState({
-                     imgData: e.target.result,
-                     show_result: true,
-                   })
-
-                 }
-                 reader.readAsDataURL(e.target.files.item(0))
-               }}
-        />
-
-      </label>,
-      onClick: (e) => {
-
-      }
-    }],
-    actions: [
-      {
-        label: '取消',
-        onClick: this.hide.bind(this)
-      }
-    ]
-  };
-
-  hide() {
-    this.setState({
-      auto_show: false,
-      ios_show: false,
-      android_show: false,
-    })
-  }
-
-  showResult() {
-    this.setState({show_result: true})
-  }
-
-  hideResult() {
-    this.setState({show_result: false})
-  }
 
 
-  render() {
-    const styles = {
-      logo: {
-        // width:'90%',
-        marginTop: '50px',
-        textAlign: 'center',
+// Create a history of your choosing (we're using a browser history in this case)
+const history = createHistory()
 
-      },
-      footer: {
-        position: 'fixed',
-        bottom: 0,
-        height: '50px',
-        width: '100%',
-      }
+// Build the middleware for intercepting and dispatching navigation actions
+const middleware = routerMiddleware(history)
 
-    }
+// Add the reducer to your store on the `router` key
+// Also apply our middleware for navigating
+const store = createStore(
+  combineReducers({
+    ...reducers,
+    router: routerReducer
+  }),
+  applyMiddleware(middleware)
+)
 
-
-    return (
-      <div>
-        <div style={styles.logo}>
-          <img src="img/page1.png" alt=""/>
-        </div>
-
-
-        <div style={styles.footer}>
-          <Button type="default"
-                  onClick={e => this.setState({auto_show: true})}>
-            选择图片
-          </Button>
-          <input type="file" name="select-file"/>
-        </div>
-
-        <ActionSheet
-          menus={this.state.menus}
-          actions={this.state.actions}
-          show={this.state.auto_show}
-          onRequestClose={e => this.setState({auto_show: false})}
-        />
-
-
-        <Popup show={this.state.show_result}
-               onRequestClose={e => this.setState({show_result: false})}
-               className="result">
-
-
-          <div className="result-img">
-            <img src={this.state.imgData}
-                 style={{width: '80%'}}
-                 alt=""/>
-
-          </div>
-
-          <div className="result-data">
-
-            <div className="list">
-              <h4 className="title">Result</h4>
-              <h2 className="emotion">Angry</h2>
-
-              <br/>
-
-              <div className="row">
-                <div className="col">
-                  <span className="lable"> Happy</span>
-                  <span className="num">2%</span>
-                </div>
-                <div className="col">
-
-                  <span className="lable"> Fear</span>
-                  <span className="num">3%</span>
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="col">
-                  <span className="lable"> Neutral</span>
-                  <span className="num">2%</span>
-                </div>
-                <div className="col">
-
-                  <span className="lable"> Angry</span>
-                  <span className="num">3%</span>
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="col">
-                  <span className="lable"> Sad</span>
-                  <span className="num">2%</span>
-                </div>
-                <div className="col">
-
-                  <span className="lable"> Disgust</span>
-                  <span className="num">3%</span>
-                </div>
-              </div>
-
-              <div className="row">
-                <div className="col">
-                  <span className="lable"> Surprise</span>
-                  <span className="num">2%</span>
-                </div>
-                <div className="col">
-
-                </div>
-              </div>
-
-            </div>
-
-
-          </div>
-
-        </Popup>
-
-      </div>
-    );
-  }
-}
-
+// Now you can dispatch navigation actions from anywhere!
+// store.dispatch(push('/foo'))
 
 Meteor.startup(() => {
-  render(<App />, document.getElementById('render-target'));
-});
+
+  ReactDOM.render(
+    <Provider store={store}>
+      { /* ConnectedRouter will use the store from Provider automatically */ }
+      <ConnectedRouter history={history}>
+        <div>
+          <Route exact path="/" component={Home}/>
+          <Route path="/result" component={Result}/>
+        </div>
+      </ConnectedRouter>
+    </Provider>,
+    document.getElementById('root')
+  )
+})
