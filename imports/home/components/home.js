@@ -31,7 +31,7 @@ const {
 export default class Home extends Component {
 
   state = {
-    show_result: true,
+    show_result: false,
     imgData: '',
 
     ///////
